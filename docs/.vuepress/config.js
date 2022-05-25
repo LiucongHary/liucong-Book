@@ -11,13 +11,14 @@ module.exports = {
         // 头部右侧导航栏链接
         nav: [{
             text: '常用构建工具',
-            link: '/buildTools/'
+            link: '/buildTools/',
+
         },
         {
                 text: 'js相关',
                 ariaLabel: 'Language Menu',
                 items: [{
-                        text: '数组方法',
+                        text: '基本知识',
                         link: '/js/'
                     },
                 ]
