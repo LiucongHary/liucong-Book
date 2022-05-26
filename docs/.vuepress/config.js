@@ -15,14 +15,24 @@ module.exports = {
 
         },
         {
-                text: 'js相关',
-                ariaLabel: 'Language Menu',
-                items: [{
-                        text: '基本知识',
-                        link: '/js/'
-                    },
-                ]
-            }
+            text: 'js相关',
+            ariaLabel: 'Language Menu',
+            items: [{
+                    text: '基本知识',
+                    link: '/js/'
+                }
+            ]
+        },
+        {
+            text:'面试',
+            ariaLabel: 'Language Menu',
+            items: [{
+                    text:'浏览器相关',
+                    link:'/interview/'
+                }
+            ]
+
+        }
         ],
         //侧边栏
         sidebar: {
@@ -38,7 +48,7 @@ module.exports = {
             },
 
             ],
-            // js相关
+            // js相关基本知识
             '/js/': [
                 {
                     title: '数据结构',
@@ -65,6 +75,16 @@ module.exports = {
                     path: '/js/es6的文件输出'
     
                 },
+            ],
+            // 面试
+            '/interview/':[
+                {
+                    title:'browser',
+                    collapsable: false,
+                    children: [
+                      '/interview/event',
+                    ]
+                }
             ]
         }
     },
