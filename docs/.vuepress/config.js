@@ -15,6 +15,16 @@ module.exports = {
 
         },
         {
+            text:'基础知识',
+            ariaLabel: 'Language Menu',
+            items:[
+                {
+                    text:'html+css',
+                    link:'/base/htmlcss',
+                }
+            ]
+        },
+        {
             text: 'js相关',
             ariaLabel: 'Language Menu',
             items: [{
@@ -47,6 +57,16 @@ module.exports = {
                 ]
             },
 
+            ],
+            //基础知识
+            '/base/':[
+             {
+                title:'基础知识储备',
+                collapsable:false,
+                children: [
+                    '/base/htmlcss'
+                ]
+              }
             ],
             // js相关基本知识
             '/js/': [
@@ -83,6 +103,7 @@ module.exports = {
                     collapsable: false,
                     children: [
                       '/interview/event',
+                      '/interview/crossDomain'
                     ]
                 }
             ]
