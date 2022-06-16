@@ -150,6 +150,95 @@
    !import(无穷), 行内(1,0,0,0), id(0,1,0,0), 类/伪类(0,0,1,0), 标签(0,0,0,1), */继承(0,0,0,0)  
     - 权重相同,就近原则
     - 权重可叠加
+   #### background背景图片
+   background-color // 支持rgba color alpha
+   background-image  // url(图片路径)
+   background-repeat // 是否平铺
+   background-attachment // scroll|fixed 背景是滚动还是固定定位
+   background-position:x y //1 方位名词 2 px值
+   background-size:// 1px 2cover等比例缩放,完全铺满容器,多余部分被裁剪 3contain等比例缩放,整张图片完全显示在容器内
+
+   #### 盒模型
+   border-collapse // 用于表格属性, 表示表格的两边框合并为一条 
+    - separate :默认值。边框会被分开
+    - collapse:边框会合并为一个单一的边框 
+    - inherit:规定应该从父元素继承border-collapse属性的值。
+
+  ##### 什么是盒模型:  
+  规定网页元素如何显示以及元素间的相互关系(包括内容区content,填充区padding,边框区border,外边界margin)
+
+  注意:  
+  1 margin可以写负值,但是padding不可以  
+  2 padding会自动撑开带有width/height的盒子  
+  3 border也会撑开盒子
+
+  box-sizing:border-box(怪异盒模型)/content-box(标准盒模型)  
+  标准盒模型:content+padding+border+margin  
+  怪异盒模型:content(content+padding+border)+margin
+
+  ##### margin在盒模型的坑
+  1 相邻的块圆度外边距合并(取较大值)
+  2 嵌套盒子(嵌套关系是垂直外边距),子盒子有margin-top值,值父盒子没有设置padding-top或者border属性,会出现外边距塌陷。解决方案(给父盒子overflow:hidden或者父盒子设置padding-top/border-top)
+  #### 浮动 float(left/right)
+  1 元素添加浮动后,会转换成行内块级元素
+  2 脱离标准流,不占位置
+  3 浮动会对下面的盒子有影响,所以浮动的盒子需要在外面包裹一个父盒子
+
+  ##### 为什么要清楚浮动?  
+   解决父级元素因为浮动高度为0的问题  
+  ##### 清楚浮动的方法
+   1 额外标签法  
+    在最后一个浮动标签后新添加一个标签清楚浮动(设置标签属性 .clear {clear:both},如果清除了浮动,父亲去自动检测孩子的高度,以最高的为准)
+   2 overflow  
+    给父元素添加overflow:hidden
+   3 after伪元素
+     给父元素添加
+     ```
+     	.clearfix:after {  /*正常浏览器 清除浮动*/
+        content:"";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+      }
+      .clearfix {
+        *zoom: 1;  /*zoom 1 就是ie6 清除浮动方式  *  ie7一下的版本所识别*/
+      }
+     ```
+  4 双伪元素
+    给父元素添加
+    ```
+      .clearfix:before, .clearfix:after {
+        content: "";
+        display: table;
+      }
+      .clearfix:after {
+        clear: both;
+      }
+
+      .clearfix {
+        *zoom: 1;
+      }
+    ```
+  #### 定位 position
+   1 static 静态定位 用途:取消定位  
+   2 relative 相对定位   
+     以自己的左上角为基准定位 (占位)  
+   3 absolute 绝对定位   
+      以距离自己最近的有定位的父元素为基准,没有定位的父元素,以浏览器为基准(不占位)  
+   4 fixed 固定定位  
+      以浏览器为基准定位(不占位)
+
+  #### 定位于浮动的区别
+    1 绝对定位是完全意义的脱标,不占位置
+    2 浮动是不完全脱标(不会影响下面盒子文字类的信息),也不占位
+  ## 需要注意
+   1 margin:0 auto 的使用
+     1>在块级元素且有宽的前提下
+     
+   
+     
+
 
 
 
