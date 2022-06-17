@@ -56,11 +56,24 @@
 - input
     标签属性:  
     type:text/password/radio/checkbox/button不同按钮/submit提交按钮/reset重置/image图像形式的提交按钮/file文件域
-    value: 默认文案  
-    maxlength:文案最大长度  
-    name:自定义控件名称
-    checked:默认选项
-    disabled:禁止选项
+    value: 默认文案    
+    maxlength:文案最大长度    
+    name:自定义控件名称  
+    checked:默认选项  
+    disabled:禁止选项    
+    email:邮件  
+    tel:手机号  
+    url:网址  
+    number:数字  
+    range:拖动滑块  
+    time:时间 
+    date:日期  
+    datetime:时间 
+    month:月份  
+    week:星期  
+
+  ###### datalist 标签是input标签中描述可能只的一个下拉选项
+  ###### fieldset 标签会在相关表单元素周围绘制边框
 
    ##### radio
    同一组必须命名相同名字的name才可以多选一
@@ -118,17 +131,21 @@
        //type 指定浏览器的解析方式
       ```
     ### 选择器
-    1.标签选择器  
-    2.id选择器  
-    3.类选择器 伪类选择器  
+    1.标签选择器 div  
+    2.id选择器 #id  
+    3.类选择器 伪类选择器 .class 
     4.通配符选择器 *  
 
     #### 复合选择器
-    1 后代选择器 div p (p是div的孩子 中间用空格隔开)  
-    2 子代选择器 ul>li (li是ul的亲儿子)   
-    3 交集选择器 div.red (即是div标签且类名是red)  
-    4 并集选择器 div,p (用','隔开,表示集体声明相同的样式)  
-    5 伪类选择器  
+    ##### 1 后代选择器 
+      div p (p是div的孩子 中间用空格隔开)  
+    ##### 2 子代选择器
+      ul>li (li是ul的亲儿子)   
+    ##### 3 交集选择器 
+      div.red (即是div标签且类名是red)  
+    ##### 4 并集选择器 
+      div,p (用','隔开,表示集体声明相同的样式)  
+    ##### 5 伪类选择器  
       :link 未访问  
       :visited 已访问  
       :hover 鼠标移动  
@@ -138,6 +155,22 @@
            color:red
        }
       ```
+    ##### 6 结构伪类选择器
+      li:first-child 第一个li标签  
+      li:last-child 最一个li标签  
+      li:nth-child(n) 第n个li标签  
+    ##### 7 属性选择器
+      div[class]{选出所有 带有class属性的}   
+      div[class=demo]{选出class = demo的}   
+      div[class^=test]{选出test开头的标签} 
+      div[class$=test] {选出test结尾的标签} 
+    ##### 8 伪元素选择器
+    	p::first-letter {选择第一个字}  
+	    p::first-line {第一行}  
+    	p::selection {选择文字时候的状态}  
+
+	  
+
     #### line-height 行高=盒子高度 可以设置单行文本垂直居中
      line-height = height 垂直居中  
      line-heigh  > height 内容偏下  
@@ -150,7 +183,7 @@
    !import(无穷), 行内(1,0,0,0), id(0,1,0,0), 类/伪类(0,0,1,0), 标签(0,0,0,1), */继承(0,0,0,0)  
     - 权重相同,就近原则
     - 权重可叠加
-   #### background背景图片
+   #### background背景图片 多个背景用','号隔开
    background-color // 支持rgba color alpha
    background-image  // url(图片路径)
    background-repeat // 是否平铺
@@ -233,10 +266,92 @@
     1 绝对定位是完全意义的脱标,不占位置
     2 浮动是不完全脱标(不会影响下面盒子文字类的信息),也不占位
   ## 需要注意
-   1 margin:0 auto 的使用
-     1>在块级元素且有宽的前提下
+   #### 1 margin:0 auto 的使用  
+     1>在块级元素且有宽的前提下  
+   #### 2 显示和隐藏  
+      display与visiblity的区别  
+      display:none/block 隐藏后不占位  
+      visiblity:visible/hidden 隐藏后占位  
+   #### h5新标签
+   header头部 nav导航栏 footer底部 article定义文章 section定义区域 aside内容之外 main time等
+   #### 插入视频 
+    1>使用iframe标签  
+    2> audio标签音频 video标签视频
+     ```
+      <video>
+        <source src="路径"/>
+      </video>
+     ```
+    
+    #### 伪元素的使用 ::before ::after
+    div::before {必须带一个属性  content 伪元素 其实这个 before 是个盒子,这个盒子是行内的盒子  可以转换
+      content:"hi", // 在div前面插入'hi'文案
+    }
      
-   
+  ## 动画相关
+   #### transition 过渡写到本身上 谁做过渡动画，写到谁身上(多组属性用逗号分隔)
+    ransition-property 用于指定应用过渡属性的名称  
+    transition-duration 用于指定这个过渡的持续时间  
+    transition-timing-function 用于指定过渡的类型  
+    transition-delay 用于指定延迟过渡的时间
+    ```
+    div {
+      width: 100px;
+      height: 100px;
+      background-color: pink;
+      /*transition: width 0.5s ease 0s, height 0.3s; 多组属性用逗号分隔*/
+      transition: all 0.5s; /*  过渡写到本身上 谁做过渡动画，写到谁身上*/
+    }
+    div:hover {
+      width: 800px;
+      height: 300px;
+
+    }
+    ```  
+    #### transform
+     translate(x,y) translateX() translateY() // 移动自己盒子的距离  
+     scale(x,y) // 写一个,默认和高度一起缩放  
+     rotate(ndeg)  
+     skew(ndeg) // 变形
+    #### transform-origin 默认中心为原点
+     transform-origin(x,y) // 支持方位名词和px
+    #### animation
+    ```
+    animation: move 2s ease 0s infinite alternate; //动画名称 花费时间 运动曲线  何时开始  播放次数  是否反方向(alternate轮流反向 forward保持执行后的状态)
+    	@keyframes move  {
+        from {
+          left: 0;
+          background-color: pink;
+        }
+
+        to {
+          left: 1000px;
+          background-color: yellow;
+          }
+    	}
+
+      or
+
+    	@keyframes move  {
+        0% {
+          left: 0;
+          background-color: pink;
+        }
+
+        100% {
+          left: 1000px;
+          background-color: yellow;
+          }
+    	}
+
+    ```
+
+    #### 不常见属性
+
+    1 backface-visibility: hidden;/*定义当图片不面向屏幕时是否可见*/
+  
+
+
      
 
 
