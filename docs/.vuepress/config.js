@@ -21,6 +21,10 @@ module.exports = {
                 {
                     text:'html+css',
                     link:'/base/htmlcss',
+                },
+                {
+                    text:'h5c3',
+                    link:'/base/h5c3',
                 }
             ]
         },
@@ -64,7 +68,8 @@ module.exports = {
                 title:'基础知识储备',
                 collapsable:false,
                 children: [
-                    '/base/htmlcss'
+                    '/base/htmlcss',
+                    '/base/h5c3',
                 ]
               }
             ],
