@@ -25,6 +25,10 @@ module.exports = {
                 {
                     text:'h5c3',
                     link:'/base/h5c3',
+                },
+                {
+                    text:'js',
+                    link:'/base/js'
                 }
             ]
         },
@@ -70,6 +74,7 @@ module.exports = {
                 children: [
                     '/base/htmlcss',
                     '/base/h5c3',
+                    '/base/js'
                 ]
               }
             ],
