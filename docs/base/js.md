@@ -6,8 +6,12 @@ js是一门解释型语言,遇到一行代码就解析一行
 js是一门动态类型的语言:执行这行代码的时候才能确定这个变量到底是什么类型  
 js最初的目的:解决用户和浏览器之间的交互问题  
 
-内存空间:
- 栈(同电梯原理一样,先进后出原则)
+
+内存空间:  
+ 栈(同电梯原理一样,先进后出原则)  
+ 值类型(number string boolean)在栈中存储  
+ 对象(object)在堆中存储,地址(引用)在栈中存储
+
 
 ## 基本数据类型
 ### 1 String
@@ -149,6 +153,11 @@ js最初的目的:解决用户和浏览器之间的交互问题
         i++;
     }
    ```
+   三个循环的区别?  
+   1 for循环知道循环次数,while和do...while不知道循环次数  
+   2 for循环执行末尾循环体后将再次进行条件判断，若条件还成立，则继续重复上述循环，当条件不成立时则跳出当下for循环。
+   while循环当满足条件时进入循环，进入循环后，当条件不满足时，执行完循环体内全部语句后再跳出（而不是立即跳出循环）  
+   3 使用目的不同:for循环是为了限制循环体的执行次数;while循环是为了反复执行语句
    #### break和continue的区别
    break:直接跳出所在的当前循环,break后面的代码不再执行  
    continue:直接进入下一次循环,continue后面的代码不再执行 
@@ -249,9 +258,7 @@ js最初的目的:解决用户和浏览器之间的交互问题
    // 方法调用
    obj.hobby();
 
-  ```
-  2 工厂模式创建对象
-  ```
+   工厂模式创建对象,函数封装
    function createObj(){
     // 创建对象
     var obj = new Object();
@@ -262,9 +269,65 @@ js最初的目的:解决用户和浏览器之间的交互问题
     }
     return obj
    }
+
   ```
-  
-    
+  2 自定义构造函数创建对象
+  ```
+   1 先定义一个构造函数 构造函数名的首字母大写  
+    function Obj(){
+      // this指的是创建的对象
+        this.name = 'LC';
+        this.hobby = function(){
+        console.log(this.name+'like eat')
+      }
+    }
+   2 创建对象
+    var obj = new Obj();
+   调用:
+      console.log(obj.name,obj.hobby())
+  ```
+ 3 字面量创建对象
+  ```
+  var obj = {};
+  obj.name = 'LC';
+  obj.hobby = function(){
+    console.log(obj.name+'like eat')
+  }
+  或者
+  var obj = {
+    name:'LC',
+    hobby:function(){
+      console.log(this.name+'like eat')
+    }
+  }
+  ```
+new执行了4件事
+1 new会在内存中创建一个新的空对象
+2 new会让this指向新的对象
+3 执行构造函数(给对象添加新的属性和方法)
+4 new会返回这个新对象
+## this问题
+ 1 对象中的this,指的就是当前对象  
+ 2 普通函数中的this,指的是window对象
+## 判断对象的类型
+#### instanceof 
+  var obj = new Object();  
+  console.log(obj instanceof Object) 
+## 对象的遍历 
+ 1 for...in 
+   ```
+    for(var key in obj){
+
+    }
+   ```
+
+## 内置对象
+ ### Math
+ Math.max() Math.min() Math.floor() Math.ceil() Math.abs() Math.random()...
+ ### Date
+ ### Array
+ ### String
+ ### Object
 
 
 
