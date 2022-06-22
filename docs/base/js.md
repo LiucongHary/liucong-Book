@@ -9,8 +9,8 @@ js最初的目的:解决用户和浏览器之间的交互问题
 
 内存空间:  
  栈(同电梯原理一样,先进后出原则)  
- 值类型(number string boolean)在栈中存储  
- 对象(object)在堆中存储,地址(引用)在栈中存储
+ 值类型(number string boolean)在栈中存储(简单数据类型是值传递)  
+ 对象(object)在堆中存储,地址(引用)在栈中存储(引用数据类型是引用(地址)传递)   
 
 
 ## 基本数据类型
@@ -321,12 +321,20 @@ new执行了4件事
     }
    ```
 
-## 内置对象
+## 内置对象(todo 后期平移过来方法总结)
  ### Math
  Math.max() Math.min() Math.floor() Math.ceil() Math.abs() Math.random()...
  ### Date
+ Date.now()....
  ### Array
+ Array.isArray(obj)
  ### String
+  基本包装类型:本事是基本类型,偶尔当成对象方式来使用.例如:string类型  
+  var str = 'hello';  
+  console.log(str.length);  
+  普通变量是不能直接调用属性和方法的,对象可以.string本身是基本类型,但是调用了属性和方法此时这个变量就不是普通变量而是对象了  
+
+
  ### Object
 
 
