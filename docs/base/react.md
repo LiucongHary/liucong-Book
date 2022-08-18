@@ -90,15 +90,33 @@ class Fun extends React.Component{
     }
   ```
 
-  #### setState() 修改数据
+  #### setState() 异步更新数据
    - 状态是可变的
    - 不能直接修改state中的值
-   - setState()作用: 1 修改state值 2 更新UI (数据驱动视图)
+   - setState()作用: 1 修改state值 2 更新UI (数据驱动视图)  
+   `注意`:  
+   1 使用setState()时,后面的setState不能依赖前面的setState的结果;虽然组件中调用多次setState但是render只会执行1次  
+   2 父组件渲染时,也会重新渲染子组件。只会渲染当前组件及其所有的子组件  
+
 
     ```
     this.setState({
       count:this.state.count +1
-    })
+    }[,()=>{
+      // 状态更新后且页面重新渲染后立即执行
+    }])
+
+    推荐使用:  
+    多次调用setState,state的值是上次setState结果的值
+    this.setState((state,props)=>{
+      // state:最新的state
+      // props:最新的props
+      return {
+        count:this.state.count +1
+      }
+    }[,()=>{
+      // 状态更新后且页面重新渲染后立即执行
+      }])
     ```
 
 ## 事件this的指向
@@ -213,7 +231,7 @@ class Fun extends React.Component{
   2 给子组件标签添加属性,值为state中的数据  
   3 子组件中通过props接收父组件中传递的数据  
   #### 子组件传递数据给父组件
-   利用回调函数,父组件提供回调,子组件调用,将传递的数据作为回调函数的参数
+   利用回调函数,父组件提供回调,子组件调用,将传递的数据作为回调函数的参数  
   1 父组件中提供一个回调函数(用于接收数据)   
   2 该函数作为属性值,传递给子组件  
   3 子组件通过props调用回调函数  
@@ -399,13 +417,112 @@ class Fun extends React.Component{
 
 
 
+## 组件的性能优化
+ #### 减轻state
+   只存储和组件渲染相关的数据（对于需要在多个方法中用到的数据，应该放在this中） 
+
+ #### 避免不必要的的重新渲染
+  组件更新机制：父组件更新也会引起它的子组件被更新（子组件没有任何变化也会重新渲染）  
+  解决方式：使用钩子函数 shouldComponentUpdate(newxProps,nextState)   
+    通过返回值决定组件是否重新渲染,true重新渲染,false不重新渲染  
+  shouldComponentUpdate触发时机: 更新阶段的钩子函数,组件重新渲染执行shouldComponentUpdate->render
+  
+  ```
+   class Hello extends React.Component{
+     shouldComponentUpdate(){
+       // todo ...
+       return false/true // 不重新渲染/重新渲染
+     }
+     render(){}
+   }
+  ```
 
 
+注意:
+ 值类型的state或者props可以直接进行setState赋值进行比较,但是引用类型不可以  
+ state或者props中的属性值是引用类型,`应该创建新数据,不要直接修改原数据`  
+ ```
+  对象
+  const newObj= {...state.obj,number:2}
+  setState({obj:newObj})  
+
+  数组
+  不要用数组的push/unShift 等直接修改当前数组的方法;而是该用concat或slice等这些返回新数组的方法
+  this.setState({
+    list:[...this.state.list,{新数据}]
+  })
+
+ ```
 
 
+## 虚拟DOM和Diff算法
 
+React更新视图:只要state变化就重新渲染视图  
+如何只更新组件中变化的dom(部分更新)?  
+虚拟dom和diff算法
 
+## react路由
+ 路由安装
+ 1 npm i react-router-dom  
+ 2 导入路由三个核心组件 Router/Route/Link  
+  ```
+  import {BrowerRouter as Router,Route,Link} from 'react-router-dom' 
+  ``` 
+ 3 使用Router组件包裹整个应用  
+  ```
+   <Router>
+     <div>
+        ... todo
+     </div>
+   </Router>
+  ```
+  4 使用`Link组件`作为导航菜单(路由入口)  
+  5 使用`Route组件`配置路由规则和要展示的组件(路由出口)  
+  ```
+  const First = () => return (<p>页面一</p>)
 
+  <Router>
+    <div>
+      <Link to="/first">页面一</Link>
+      <Route path="/first" component={First}></Route>
+    </div>
+  </Router>
+  ```
 
+#### 常用组件说明 pathName就是地址栏中的 例如:'/login'
+- Router组件:包裹整个应用,一个React应用只需要使用一次
+- 常用两种Router:HashRouter和BrowerRouter  
+   HashRouter:使用URL的哈希值实现(localhost:8080/#/first)  
+   BrowserRouter:使用H5的history API实现(localhost:8080/first) `推荐`
 
+- Link组件:用于指定导航链接(会转化成a标签,to会转换成href属性,其中to属性可以通过(location.pathname)得到)  
+- Route组件:指定路由展示组件相关信息  
+  path属性:路由规则  
+  component属性:展示的组件  
+  Route组件写在哪,渲染出来的组件就展示在哪
 
+#### 路由的执行过程
+1 点击Link组件,修改了浏览器地址栏中的url  
+2 React路由监听到地址栏url的变化  
+3 React路由内部遍历所有Route组件,使用路由规则(path)与pathname进行匹配  
+4 当路由规则(path)能够匹配地址栏中的pathname时,就展示该Route组件的内容  
+
+#### 编程式导航(通过JS代码实现页面的跳转)
+```
+// history是React路由提供的,用于获取浏览器历史记录的相关信息
+this.props.history.push('/home') 跳转到某个页面  
+this.props.history.go(n) 前进或后退到某个页面,n表示前进或后退页面数量  
+```
+
+#### 默认路由(进入页面就会匹配的路由)
+```
+默认路由path为:/
+<Route path="/" component={Home}></Route>
+```
+#### 路由匹配模式
+默认情况下,React路由是模糊匹配模式(只要pathname以path开头就会匹配成功)  
+精确匹配:  
+给组件添加`exact`属性,只有path和pathname完全匹配时才会展示该路由
+```
+ <Route exact path="/" component=... />
+```
