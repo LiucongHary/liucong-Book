@@ -526,3 +526,188 @@ this.props.history.go(n) 前进或后退到某个页面,n表示前进或后退�
 ```
  <Route exact path="/" component=... />
 ```
+
+## React Hook
+ ### Hook使用注意事项
+ 1 Hook 不能在class组件中使用  
+ 2 只能在函数最外层调用 Hook。不要在循环、条件判断或者子函数中调用  
+ 3 只能在React的函数中调用Hook。不要在JavaScript函数中调用  
+
+ ### 基础Hook
+ - useState
+  ```
+  useState传入的是initialState是当前state初始值,后续的重新渲染中,useState返回的第一个值将始终是更新后最新的state
+  const [state,setState] = useState(0);
+
+  setState更新state数据 
+  写法1 setState(state+1)
+  写法2 setState(() =>{return state+1})
+
+  如果定义的是引用类型,使用函数式更新和扩展运算符进行更新
+  const [state,setState] = useState({})
+  setState(()=>{
+    return {
+      ...state
+    }
+  })
+
+  初始state理解
+  1 惰性state
+   initialState参数只会在组件的初始渲染中起作用,后续渲染会被忽略 
+  2 复杂初始state的定义
+   初始state需要通过复杂计算获得 可以 useState(()=>{}) 传入一个函数,在函数中计算并返回初始的state
+
+  ```
+
+  - useContext
+   接受一个context对象并返回context的当前值,使用useContext可以实现跨组件之间的通信 
+
+   ```
+   export const themes = {
+    light:{
+      background:'#fff'
+    },
+    dark:{
+      background:'#000'
+    }
+   }
+   创建上下文
+   export const ThemeContext = React.createContext(themes.dark)
+
+   父组件
+   function F(){
+    return(
+      <ThemeContext.Provider value="dark">
+        <Toolbar/>
+      </ThemeContext.Provider>
+    )
+   }
+
+   中间组件
+   function Toolbar(){
+    return (
+      <ThemeButton/>
+    )
+   }
+
+   // 子组件
+   function ThemeButton() {
+    const theme = useContext(ThemeContext);
+    return (
+      <div>{theme}<div>
+    )
+   }
+   ```
+
+- useEffect 函数组件中可以写多个useEffect
+React在完成对DOM的更新后会执行,默认情况下,React会在每次渲染后调用副作用函数,包括第一次渲染的时候  
+```
+ useEffect有两个参数,第一个参数是副作用的处理函数,第二个参数是与该副作用关联的状态或shuxing依赖的数组
+  // 添加第二个参数为空数组,只在初始化的时候执行
+  // 第二个参数有相关属性,在初始化时候执行和该属性变化的时候执行
+ useEffect(()=>{
+  setState(1)
+ },[])
+
+ useEffect中的return 
+ useEffect(()=>{
+  // 注册监听
+  return ()=>{
+    // 清除监听逻辑
+  }
+ })
+```
+
+useEffect实现生命周期
+```
+
+实现 componentDidMount和 componentWillUnmount
+function Demo(){
+  useEffect(()=>{
+    console.log('mounted')
+    return ()=>{
+      console.log(unmount)
+    }
+  },[])
+}
+
+实现 componentDidUpdate
+
+function Demo (props) {
+  const [useId,detailId] = props
+  useEffect(()=>{
+    // userId变化后的处理逻辑
+  },[userId])
+  useEffect(()=>{
+    // detailId变化后的处理逻辑
+  },[detailId])
+}
+
+```
+
+- useReducer
+useReducer接收3个参数 
+第一个参数:处理状态更新的reducer  
+第二个参数:状态初始值  
+第三个参数:状态初始值函数  
+
+const [state, dispatch] = useReducer(reducer,initialArg, init)
+```
+ // reducer函数 
+  state是初始数据
+ function reducer(state,action){
+   switch (action.type) {
+     case 'increment':
+     return { count:state+1}
+   }
+ }
+ const [state,dispatch] = useReducer(
+  reducer,
+  {count:initialCount},
+  // 惰性初始化,将第二个参数作为第三个函数入参传入
+  function init(initialCount) {
+    reutrn {count:initialCount}
+  }
+ )
+ // state是reducer函数返回的数据 
+ // dispatch是触发reducer函数的方法
+```
+
+对于复杂场景的状态关联进行处理
+
+- useCallback  
+第一个参数: 处理函数  
+第二个参数:数组,用于制定被记忆函数更新所依赖的值
+
+```
+const memoizedCallback = useCallback(
+  ()=>{
+    //函数 todo(a,b),只有第二个参数属性a或者b发生改变,此函数才会执行 这个是一个函数
+  },
+  [a,b]
+)
+```
+为什么用useCallback?  
+在函数式组件中,定义在组件内部函数会随着状态值的更新而重新渲染,函数中定义的函数会被频繁定义,在父子组件的通信中这样是非常消耗性能的。使用useCallback集合memo可以有效的减少子组件更新频率,提高效率
+
+```
+父组件中嵌套子组件,父组件更新不管子组件是否修改,都会更新子组件,所以需要
+const Child = React.memo(function Child(){
+  return (
+    <div>...todo...</div>
+  )
+})
+```
+
+- useMemo  (相当于vue中的computed)  
+第一个参数:用于处理耗时计算并返回需要记录的值 (不仅可以返回数值也可以返回dom)   
+第二个参数:数组,用于指定被记忆函数更新所依赖的值  
+```
+const memoizedValue = useMemo(
+  ()=>computedValue(a,b),
+  [a,b]
+)
+```
+useMemo和useCallback的区别?  
+1 useMemo传入函数内部需要有返回值  
+2 useMemo只能声明在函数式组件内部
